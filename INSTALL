@@ -1,0 +1,48 @@
+* About qtunet-qt4
+
+1. Build
+
+    To build qtunet-qt4, go to src/qtunet-qt4, run Qt4's qmake (usually qmake-qt4 or qmake), and run
+        
+        make
+
+2. Install
+
+    To install qtunet-qt4 after build, run
+
+        make install
+
+    as root. It would be installed into /usr/local/bin/qtunet
+
+3. Uninstall
+
+    To uninstall qtunet-qt4, run
+
+        make uninstall
+
+    as root.
+
+* About mytunet console version
+
+1. Build
+
+    To build the console version, go to src/mytunet-console/console, run
+
+        ./genmakefile.sh
+        make
+
+2. Install
+
+    To install mytunet console version after build, run
+
+        make install
+
+    as root. It would be installed into /usr/local/bin/mytunet
+
+3. Uninstall
+
+    To uninstall mytunet, run
+
+        make uninstall
+
+    as root.
