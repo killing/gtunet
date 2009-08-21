@@ -133,9 +133,10 @@ VOID mytunetsvc_transmit_log_posix(LOG *log)
 }
 
 extern VOID mytunetsvc_transmit_log_qt(LOG *log);
-#ifdef _WIN32
+
 VOID mytunetsvc_transmit_log_qt(LOG *log){}
-#endif
+
+
 
 typedef VOID (  *MYTUNETSVC_TRANSMIT_FUNC)(LOG *log);
 
