@@ -1,14 +1,14 @@
 void on_button_quit_clicked (GtkWidget *widget,
-														 gpointer data);
+                             gpointer data);
 
 void on_button_login_clicked (GtkWidget *widget,
-															gpointer data);
+                              gpointer data);
 
 void on_button_logout_clicked (GtkWidget *widget,
-															 gpointer data);
+                               gpointer data);
 
 void on_entry_password_changed (GtkWidget *widget,
-																gpointer data);
+                                gpointer data);
 
 void * mytunet_start (void *data);
 
