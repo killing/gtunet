@@ -72,6 +72,7 @@
                 <property name="can_focus">True</property>
                 <property name="visibility">False</property>
                 <property name="invisible_char">&#x2022;</property>
+                <signal name="changed" handler="on_entry_password_changed"/>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -225,12 +226,19 @@ None(International)</property>
           </widget>
         </child>
         <child>
-          <widget class="GtkTextView" id="textview_log">
+          <widget class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="pixels_inside_wrap">1</property>
-            <property name="editable">False</property>
-            <property name="cursor_visible">False</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <property name="window_placement_set">True</property>
+            <child>
+              <widget class="GtkTextView" id="textview_log">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="cursor_visible">False</property>
+              </widget>
+            </child>
           </widget>
           <packing>
             <property name="top_attach">1</property>

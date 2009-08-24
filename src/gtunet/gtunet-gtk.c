@@ -7,7 +7,9 @@
 #include <glade/glade.h>
 
 #include "../ethcard.h"
+#include "../mytunetsvc.h"
 
+#include "gtunet-gtk.h"
 #include "gtunet.h"
 
 /*
@@ -46,24 +48,31 @@ static GtkComboBox *create_combo_box_adapter (GladeXML *xml);
  * main function
  */
 
+GladeXML *xml;
+GtkWidget *window;
+GtkWidget *about_dialog;
+GtkWidget *button_about;
+GtkWidget *button_quit;
+GtkWidget *combobox_limitation;
+GtkWidget *image_status;
+
+GtkWidget *entry_username;
+GtkWidget *entry_password;
+GtkWidget *checkbutton_savepassword;
+GtkWidget *checkbutton_zijing;
+GtkWidget *textview_log;
+
+GtkStatusIcon *tray_icon;
+GtkMenu *tray_menu;
+GtkComboBox *combobox_adapter;
+GtkTextBuffer *textbuffer;
+
+ETHCARD_INFO ethcards[16];
+int ethcard_count;
+
 int
 main(int argc, char *argv[])
 {
-	GladeXML *xml = NULL;
-	GtkWidget *window = NULL;
-	GtkWidget *about_dialog = NULL;
-	GtkWidget *button_about = NULL;
-	GtkWidget *button_quit = NULL;
-	GtkWidget *combobox_limitation = NULL;
-	GtkWidget *image_status = NULL;
-	
-	GtkStatusIcon *tray_icon = NULL;
-	GtkMenu *tray_menu = NULL;
-	GtkComboBox *combobox_adapter = NULL;
-	
-  ETHCARD_INFO ethcards[16];
-	int ethcard_count;
-
 	int i;
 	
 	
@@ -92,7 +101,18 @@ main(int argc, char *argv[])
 	image_status = glade_xml_get_widget(xml, "image_status");
 	gtk_image_set_from_file((GtkImage *)image_status, "resource/image1.png");
 	
+	entry_username = glade_xml_get_widget(xml, "entry_username");
+	
+	entry_password = glade_xml_get_widget(xml, "entry_password");
 
+	checkbutton_savepassword = glade_xml_get_widget(xml,
+																									"checkbutton_savepassword");
+	checkbutton_zijing = glade_xml_get_widget(xml,
+																						"checkbutton_zijing");
+
+	textview_log = glade_xml_get_widget(xml, "textview_log");
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview_log));
+	
 	/* create widgets from code */
 	tray_icon = create_tray_icon();
 	
@@ -110,7 +130,7 @@ main(int argc, char *argv[])
 		}
 	
 	
-	/* connect the signals in window */
+	/* connect the signals in gtk window */
 	g_signal_connect(G_OBJECT (window),
 									 "delete_event",
 									 G_CALLBACK (window_delete_event),
@@ -125,7 +145,20 @@ main(int argc, char *argv[])
 																"on_button_quit_clicked",
 																G_CALLBACK (on_button_quit_clicked),
 																NULL);
+	
+	glade_xml_signal_connect_data(xml,
+																"on_button_login_clicked",
+																G_CALLBACK (on_button_login_clicked),
+																NULL);
 
+	glade_xml_signal_connect_data(xml,
+																"on_button_logout_clicked",
+																G_CALLBACK (on_button_logout_clicked),
+																NULL);
+
+	glade_xml_signal_connect(xml,
+													 "on_entry_password_changed",
+													 G_CALLBACK (on_entry_password_changed));
 	
 	/* connect signals in about_dialog */
 	g_signal_connect(G_OBJECT (about_dialog),
@@ -153,7 +186,11 @@ main(int argc, char *argv[])
 	
 	/* show the window */
 	gtk_widget_show(window);
-
+	
+	
+	/* start mytunet service */
+	mytunetsvc_set_transmit_log_func(MYTUNETSVC_TRANSMIT_LOG_POSIX);
+	mytunetsvc_init();
 	
 	/* start the event loop */
 	gtk_main();
